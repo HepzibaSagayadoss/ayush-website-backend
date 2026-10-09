@@ -8,6 +8,11 @@ import { ConfigService } from '@nestjs/config';
 const server = express();
 let initializationPromise: Promise<void> | null = null;
 
+// Automatically redirect root / to /api
+server.get('/', (req, res) => {
+  res.redirect('/api');
+});
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
   const configService = app.get(ConfigService);

@@ -12,6 +12,12 @@ async function bootstrap() {
   // Global prefix
   app.setGlobalPrefix('api');
 
+  // Redirect root / to /api
+  const httpAdapter = app.getHttpAdapter().getInstance();
+  httpAdapter.get('/', (req: any, res: any) => {
+    res.redirect('/api');
+  });
+
   // Global Validation Pipe
   app.useGlobalPipes(
     new ValidationPipe({
