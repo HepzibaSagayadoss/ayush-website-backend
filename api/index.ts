@@ -6,7 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 const server = express();
-let isInitialized = false;
+let initializationPromise: Promise<void> | null = null;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
@@ -38,12 +38,22 @@ async function bootstrap() {
   });
 
   await app.init();
-  isInitialized = true;
 }
 
 export default async function handler(req: Request, res: Response) {
-  if (!isInitialized) {
-    await bootstrap();
+  try {
+    if (!initializationPromise) {
+      initializationPromise = bootstrap();
+    }
+    await initializationPromise;
+    server(req, res);
+  } catch (error: any) {
+    console.error('Serverless Initialization Error:', error);
+    res.status(500).json({
+      statusCode: 500,
+      message: 'Backend serverless initialization failed',
+      error: error?.message || String(error),
+      hint: 'If this is a database connection error, ensure DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, and DB_NAME are configured in your Vercel Project Settings > Environment Variables.',
+    });
   }
-  server(req, res);
 }
