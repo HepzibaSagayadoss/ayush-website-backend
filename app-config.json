@@ -1,0 +1,8 @@
+{
+  "command": "node dist/main",
+  "stack": "nodejs20",
+  "env_variables": {
+    "NODE_ENV": "production"
+  },
+  "memory": 512
+}

@@ -56,8 +56,10 @@ async function bootstrap() {
     customSiteTitle: 'Ayush Hospital API Docs',
   });
 
-  const port = configService.get<number>('PORT', 4000);
-  await app.listen(port);
+  const port =
+    Number(process.env.X_ZOHO_CATALYST_LISTEN_PORT) ||
+    Number(configService.get<number>('PORT', 4000));
+  await app.listen(port, '0.0.0.0');
 
   logger.log(`=======================================================`);
   logger.log(`🏥 Ayush Hospital Backend is running on port: ${port}`);
