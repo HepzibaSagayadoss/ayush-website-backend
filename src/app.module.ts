@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnquiriesModule } from './enquiries/enquiries.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { MailModule } from './mail/mail.module';
+import { AppController } from './app.controller';
 import { Enquiry } from './enquiries/entities/enquiry.entity';
 import { Appointment } from './appointments/entities/appointment.entity';
 
@@ -36,5 +37,6 @@ import { Appointment } from './appointments/entities/appointment.entity';
     EnquiriesModule,
     AppointmentsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
